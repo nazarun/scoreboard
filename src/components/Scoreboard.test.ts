@@ -1,4 +1,4 @@
-import { Scoreboard } from './Scoreboard';
+import {GoalType, Scoreboard} from './Scoreboard';
 
 describe('Scoreboard', () => {
     let scoreboard: Scoreboard;
@@ -6,6 +6,13 @@ describe('Scoreboard', () => {
     beforeEach(() => {
         scoreboard = new Scoreboard();
     });
+
+    const mockedMatch = {
+        homeTeam: 'Team A',
+        awayTeam: 'Team B',
+        homeScore: 0,
+        awayScore: 0,
+    }
 
     test('should start a new match with initial score 0-0', () => {
         scoreboard.startMatch('Team A', 'Team B');
@@ -24,6 +31,25 @@ describe('Scoreboard', () => {
         const matches = scoreboard.getMatches();
         expect(matches[0].homeTeam).toBe('Home Team');
         expect(matches[0].awayTeam).toBe('Away Team');
+    });
+
+    test('should update the score of an existing match', () => {
+        scoreboard.startMatch('Team A', 'Team B');
+        scoreboard.updateScore(mockedMatch, GoalType.HOME_GOAL);
+        const matches = scoreboard.getMatches();
+        expect(matches[0]).toEqual({
+            homeTeam: 'Team A',
+            awayTeam: 'Team B',
+            homeScore: 1,
+            awayScore: 0,
+        });
+    });
+
+    test('should throw an error if the match does not exist', () => {
+        mockedMatch.homeTeam = 'Nonexistent Team';
+        expect(() => {
+            scoreboard.updateScore(mockedMatch, GoalType.HOME_GOAL);
+        }).toThrow('Match not found');
     });
 });
 
