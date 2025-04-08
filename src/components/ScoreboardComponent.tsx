@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Scoreboard, Match } from './Scoreboard';
+import {Scoreboard, Match, GoalType} from './Scoreboard';
+
+const scoreboard = new Scoreboard();
 
 const ScoreboardComponent: React.FC = () => {
-  const [scoreboard] = useState(new Scoreboard());
+  const [matches, setMatches] = useState<Match[]>(scoreboard.getMatches());
   const [homeTeam, setHomeTeam] = useState('');
   const [awayTeam, setAwayTeam] = useState('');
-  const [matches, setMatches] = useState<Match[]>([]);
 
   const handleStartMatch = () => {
     if (homeTeam && awayTeam) {
@@ -14,6 +15,11 @@ const ScoreboardComponent: React.FC = () => {
       setHomeTeam('');
       setAwayTeam('');
     }
+  };
+
+  const onUpdateScore = (match: Match, goalType: GoalType) => {
+    scoreboard.updateScore(match, goalType);
+    setMatches(scoreboard.getMatches());
   };
 
   return (
@@ -36,8 +42,10 @@ const ScoreboardComponent: React.FC = () => {
       </div>
       <ul>
         {matches.map((match, index) => (
-          <li key={index}>
+          <li key={`${match.homeTeam}-${index}`}>
             {match.homeTeam} vs {match.awayTeam}: {match.homeScore} - {match.awayScore}
+            <button onClick={() => onUpdateScore(match, GoalType.HOME_GOAL)}>Home team Goal</button>
+            <button onClick={() => onUpdateScore(match, GoalType.AWAY_GOAL)}>Away team Goal</button>
           </li>
         ))}
       </ul>
