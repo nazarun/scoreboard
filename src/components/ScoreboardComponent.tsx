@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {Scoreboard, Match, GoalType} from './Scoreboard';
+import {Scoreboard} from './Scoreboard';
+import { Match, GoalType } from "../types/commonTypes";
 
 const scoreboard = new Scoreboard();
 
@@ -8,10 +9,8 @@ const ScoreboardComponent: React.FC = () => {
   const [homeTeam, setHomeTeam] = useState('');
   const [awayTeam, setAwayTeam] = useState('');
   const [summary, setSummary] = useState<Match[]>(scoreboard.getSummary());
-    console.log(matches, 'matches');
-    console.log(summary, 'summary');
 
-    useEffect(() => {
+  useEffect(() => {
     setSummary(scoreboard.getSummary());
   }, [matches]);
 
@@ -51,29 +50,33 @@ const ScoreboardComponent: React.FC = () => {
           value={awayTeam}
           onChange={(e) => setAwayTeam(e.target.value)}
         />
-        <button onClick={handleStartMatch}>Start Match</button>
+        <button onClick={handleStartMatch} disabled={!homeTeam || !awayTeam}>Start Match</button>
       </div>
-
-      <h2>Ongoing matches</h2>
-      <ul>
-        {matches.map((match, index) => (
-          <li key={`${match.homeTeam}-${index}`}>
+      
+      {matches.length > 0 ?
+        <>
+          <h2>Ongoing matches</h2>
+          {matches.map((match, index) => (
+            <div key={`ongoing-${index}`}>
+              {match.homeTeam} vs {match.awayTeam}: {match.homeScore} - {match.awayScore}
+              <button onClick={() => onUpdateScore(match, GoalType.HOME_GOAL)}>Home team Goal</button>
+              <button onClick={() => onUpdateScore(match, GoalType.AWAY_GOAL)}>Away team Goal</button>
+              <button onClick={() => onFinishMatch(match)}>Finish match</button>
+            </div>
+          ))}
+        </> : null
+      }
+      
+      {summary.length > 0 ?
+        <>
+          <h2>Matches summary</h2>
+          {summary.map((match, index) => (
+          <div key={`summary-${index}`}>
             {match.homeTeam} vs {match.awayTeam}: {match.homeScore} - {match.awayScore}
-            <button onClick={() => onUpdateScore(match, GoalType.HOME_GOAL)}>Home team Goal</button>
-            <button onClick={() => onUpdateScore(match, GoalType.AWAY_GOAL)}>Away team Goal</button>
-            <button onClick={() => onFinishMatch(match)}>Finish match</button>
-          </li>
-        ))}
-      </ul>
-
-      <h2>Matches summary</h2>
-      <ul>
-        {summary.map((match, index) => (
-          <li key={`${match.homeTeam}-${index}`}>
-            {match.homeTeam} vs {match.awayTeam}: {match.homeScore} - {match.awayScore}
-          </li>
-        ))}
-      </ul>
+          </div>
+          ))}
+        </> : null
+      }
     </div>
   );
 };

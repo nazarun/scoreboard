@@ -1,4 +1,5 @@
-import {GoalType, Match, Scoreboard} from './Scoreboard';
+import { Scoreboard } from './Scoreboard';
+import { Match, GoalType } from "../types/commonTypes";
 
 describe('Scoreboard', () => {
     let scoreboard: Scoreboard;
