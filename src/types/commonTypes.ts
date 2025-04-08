@@ -6,6 +6,6 @@ export interface Match {
 }
 
 export enum GoalType {
-  HOME_GOAL = 'HOME_GOAL',
-  AWAY_GOAL = 'AWAY_GOAL',
+  HOME_GOAL = "HOME_GOAL",
+  AWAY_GOAL = "AWAY_GOAL",
 }
