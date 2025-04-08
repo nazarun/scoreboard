@@ -57,4 +57,18 @@ export class Scoreboard {
             (m) => m.homeTeam !== match.homeTeam || m.awayTeam !== match.awayTeam
         );
     }
+
+    getSummary(): Match[] {
+        return [...this.matches]
+            .sort((a, b) => {
+                const totalScoreA = a.homeScore + a.awayScore;
+                const totalScoreB = b.homeScore + b.awayScore;
+
+                if (totalScoreA === totalScoreB) {
+                    return this.matches.indexOf(b) - this.matches.indexOf(a);
+                }
+
+                return totalScoreB - totalScoreA;
+            });
+    }
 }
