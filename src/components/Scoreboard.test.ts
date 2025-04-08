@@ -51,5 +51,20 @@ describe('Scoreboard', () => {
             scoreboard.updateScore(mockedMatch, GoalType.HOME_GOAL);
         }).toThrow('Match not found');
     });
+
+    test('should remove a match from the scoreboard', () => {
+        scoreboard.startMatch('Team A', 'Team B');
+        scoreboard.finishMatch(mockedMatch);
+        const matches = scoreboard.getMatches();
+        expect(matches).toHaveLength(0);
+    });
+
+    test('should throw an error if the match does not exist', () => {
+        mockedMatch.homeTeam = 'Nonexistent Team';
+        expect(() => {
+            scoreboard.finishMatch(mockedMatch);
+        }).toThrow('Match not found');
+    });
+
 });
 

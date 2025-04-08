@@ -45,4 +45,16 @@ export class Scoreboard {
             index === matchIndex ? updatedMatch : m
         );
     }
+
+    finishMatch(match: Match): void {
+        const matchExists = this.matches.some(
+            (m) => m.homeTeam === match.homeTeam && m.awayTeam === match.awayTeam
+        );
+        if (!matchExists) {
+            throw new Error('Match not found');
+        }
+        this.matches = this.matches.filter(
+            (m) => m.homeTeam !== match.homeTeam || m.awayTeam !== match.awayTeam
+        );
+    }
 }

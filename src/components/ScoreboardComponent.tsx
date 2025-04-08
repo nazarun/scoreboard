@@ -22,6 +22,11 @@ const ScoreboardComponent: React.FC = () => {
     setMatches(scoreboard.getMatches());
   };
 
+  const onFinishMatch = (match: Match) => {
+    scoreboard.finishMatch(match);
+    setMatches(scoreboard.getMatches());
+  };
+
   return (
     <div>
       <h1>Scoreboard</h1>
@@ -46,6 +51,7 @@ const ScoreboardComponent: React.FC = () => {
             {match.homeTeam} vs {match.awayTeam}: {match.homeScore} - {match.awayScore}
             <button onClick={() => onUpdateScore(match, GoalType.HOME_GOAL)}>Home team Goal</button>
             <button onClick={() => onUpdateScore(match, GoalType.AWAY_GOAL)}>Away team Goal</button>
+            <button onClick={() => onFinishMatch(match)}>Finish match</button>
           </li>
         ))}
       </ul>
